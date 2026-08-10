@@ -2,6 +2,7 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Генератор слайдів пісні</title>
 <style>
   * { box-sizing: border-box; }
@@ -103,6 +104,13 @@ function generate() {
   let stanzas = text.split(/\n\s*\n/).map(s => s.trim()).filter(s => s.length > 0);
   if (stanzas.length === 0) stanzas = [text];
 
+  // Перший рядок тексту вважаємо назвою пісні
+  const firstLine = text.split('\n')[0].trim();
+  const songTitle = (firstLine.replace(/[*_]/g, '').trim() || 'Слайди пісні')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
   const slidesHtml = stanzas.map((s, i) => {
     const escaped = s
       .replace(/&/g, '&amp;')
@@ -124,7 +132,8 @@ function generate() {
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<title>Слайди пісні</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>${songTitle}</title>
 <style>
   * { box-sizing: border-box; }
   html, body {
@@ -198,6 +207,12 @@ function generate() {
   body.light-theme .adjacent-preview {
     color: #aaa;
   }
+  @media (max-width: 768px) {
+    .nav-hint,
+    .adjacent-preview {
+      display: none;
+    }
+  }
   .font-controls {
     position: fixed;
     top: 20px;
@@ -245,7 +260,7 @@ ${slidesHtml}
   <div id="prevPreview"></div>
   <div id="nextPreview"></div>
 </div>
-<div class="nav-hint">↑↓ / ←→ / пробіл / колесико — гортати · Esc — закрити · A± розмір шрифта · Shift +/− лупа · T — тема · F — шрифт · B — ВЕЛИКІ ЛІТЕРИ</div>
+<div class="nav-hint">↑↓ / ←→ / пробіл / колесико / свайп — гортати · Esc — закрити · A± розмір шрифта · Shift +/− лупа · T — тема · F — шрифт · B — ВЕЛИКІ ЛІТЕРИ</div>
 <div class="font-controls">
   <button onclick="event.stopPropagation(); changeFontSize(-4)" title="Зменшити шрифт">A−</button>
   <button onclick="event.stopPropagation(); changeFontSize(4)" title="Збільшити шрифт">A+</button>
@@ -417,6 +432,31 @@ ${slidesHtml}
     }
     setTimeout(() => { wheelLock = false; }, 400);
   }, { passive: false });
+
+  // --- Свайпи на мобільних пристроях ---
+  let touchStartY = null;
+  document.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+  }, { passive: false });
+
+  document.addEventListener('touchend', (e) => {
+    if (touchStartY === null) return;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diff = touchEndY - touchStartY;
+    const threshold = 50;
+    if (diff > threshold) {
+      // палець рухається вниз (свайп вниз) = наступний слайд
+      showSlide(current + 1);
+    } else if (diff < -threshold) {
+      // палець рухається вгору (свайп вгору) = попередній слайд
+      showSlide(current - 1);
+    }
+    touchStartY = null;
+  }, { passive: true });
 <\/script>
 </body>
 </html>`;
