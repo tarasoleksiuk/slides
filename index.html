@@ -260,7 +260,7 @@ ${slidesHtml}
   <div id="prevPreview"></div>
   <div id="nextPreview"></div>
 </div>
-<div class="nav-hint">↑↓ / ←→ / пробіл / колесико / свайп — гортати · Esc — закрити · A± розмір шрифта · Shift +/− лупа · T — тема · F — шрифт · B — ВЕЛИКІ ЛІТЕРИ</div>
+<div class="nav-hint">↑↓ / ←→ / пробіл / колесико / свайп — гортати · Esc — закрити · A± розмір шрифта · Shift +/− лупа · T — тема · F — шрифт · B — ВЕЛИКІ ЛІТЕРИ · W — повний екран</div>
 <div class="font-controls">
   <button onclick="event.stopPropagation(); changeFontSize(-4)" title="Зменшити шрифт">A−</button>
   <button onclick="event.stopPropagation(); changeFontSize(4)" title="Збільшити шрифт">A+</button>
@@ -269,6 +269,7 @@ ${slidesHtml}
   <button onclick="event.stopPropagation(); toggleTheme()" title="Змінити тему (T)" id="themeBtn">🌙</button>
   <button onclick="event.stopPropagation(); cycleFont()" title="Наступний шрифт (F)" id="fontBtn">Aa</button>
   <button onclick="event.stopPropagation(); toggleUppercase()" title="Верхній регістр (B)" id="caseBtn">AB</button>
+  <button onclick="event.stopPropagation(); toggleFullscreen()" title="Повний екран (W)" id="fullscreenBtn">⛶</button>
 </div>
 
 <script>
@@ -357,6 +358,20 @@ ${slidesHtml}
     texts.forEach(t => t.style.textTransform = isUppercase ? 'uppercase' : 'none');
   }
 
+  // --- Повноекранний режим ---
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    } else {
+      document.exitFullscreen?.().catch(() => {});
+    }
+  }
+
+  document.addEventListener('fullscreenchange', () => {
+    const btn = document.getElementById('fullscreenBtn');
+    if (btn) btn.textContent = document.fullscreenElement ? '⤢' : '⛶';
+  });
+
   function getFirstWords(idx) {
     if (idx < 0 || idx >= slides.length) return '';
     const el = slides[idx].querySelector('.slide-text');
@@ -413,6 +428,8 @@ ${slidesHtml}
       cycleFont();
     } else if (e.code === 'KeyB') {
       toggleUppercase();
+    } else if (e.code === 'KeyW') {
+      toggleFullscreen();
     }
   });
 
