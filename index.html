@@ -46,20 +46,24 @@
     width: 100%;
     max-width: 700px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     margin-bottom: 8px;
   }
-  #themeToggleMain {
+  #themeToggleMain,
+  #cloudOpenBtn {
     background: none;
     border: none;
     border-radius: 8px;
     width: 40px;
     height: 40px;
+    margin: 0;
+    padding: 0;
     font-size: 18px;
     cursor: pointer;
     color: #eee;
   }
-  body.light-theme #themeToggleMain {
+  body.light-theme #themeToggleMain,
+  body.light-theme #cloudOpenBtn {
     color: #111;
   }
   button {
@@ -80,17 +84,31 @@
     font-size: 13px;
     color: #999;
   }
+  .mountain-link {
+    margin-top: 14px;
+    font-size: 26px;
+    text-decoration: none;
+    line-height: 1;
+    opacity: 0.85;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .mountain-link:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
 </style>
 </head>
 <body>
 
 <div class="top-bar">
+  <button id="cloudOpenBtn" title="Хмара Пісень (нова вкладка)">☁️</button>
   <button id="themeToggleMain" onclick="document.body.classList.toggle('light-theme'); this.textContent = document.body.classList.contains('light-theme') ? '☀️' : '🌙';" title="Змінити тему">🌙</button>
 </div>
 <h1>Генератор слайдів для тексту пісні</h1>
 <textarea id="lyrics" placeholder="Встав сюди текст пісні. Куплети розділяй порожнім рядком — кожен куплет стане окремим слайдом на весь екран."></textarea>
 <button onclick="generate()">Генерувати</button>
 <p class="hint">Порада: розділяй куплети порожнім рядком (Enter двічі). Текст між * або ** — жирний, між _ або __ — курсив. У режимі перегляду перемикай слайди стрілками або пробілом. A± — розмір шрифта, Shift +/− — лупа, T — тема.</p>
+<a href="https://t.me/VerkhnieVysotske/7" target="_blank" rel="noopener noreferrer" class="mountain-link" title="Верхнє Висоцьке">⛰️</a>
 
 <script>
 function generate() {
@@ -303,7 +321,7 @@ ${slidesHtml}
   }
 
   // --- Перемикання шрифтів (клавіша F) ---
-  const fontList = ['Akrobat Black', 'Segoe UI', 'Arial', 'sans-serif', 'Roboto', 'Tahoma', 'Times New Roman', 'Comic Sans MS'];
+  const fontList = ['Akrobat Black', 'Segoe UI', 'Arial', 'Roboto', 'Tahoma', 'Times New Roman', 'Comic Sans MS'];
   let fontIndex = 0;
 
   function isFontAvailable(font) {
@@ -487,6 +505,511 @@ ${slidesHtml}
   win.document.write(presentationHtml);
   win.document.close();
 }
+
+/* ===== Хмара Пісень (нова вкладка) ===== */
+const cloudSongsRaw = [
+"Above all",
+"Bless the Lord oh my soul",
+"How Great Is Our God",
+"It's a beautiful day",
+"Алілуя, Алілуя, Ти - наш Бог!",
+"Ангели в небі Господа славлять",
+"Бачу Бога кожен день",
+"Боже, Україну збережи",
+"Біля Ісуса радість",
+"В далекі часи",
+"В день Різдва",
+"В долині плачу, в небо зір направляючи",
+"В земній долині задоволений я",
+"В лузі ось косарі",
+"В цей день славний я хочу",
+"В час горя та журби",
+"Величає Тебе душа моя",
+"Величний наш Бог",
+"Встає в синім небі зоря",
+"Вся земля так довго на цей день чекала",
+"Відкрий серця двері",
+"Він воскрес, щоб весь світ оживити",
+"Він так любить всіх нас",
+"Вірю я в обітниці Христа-Царя",
+"Глянь в небеса",
+"Голгофа",
+"Господи, Ти – надія у житті",
+"Господь, я в душі Тобі вдячний",
+"Господь, я славлю Тебе",
+"Дивлюсь я угору туди",
+"Дивна сталася новина",
+"Дитинство моє як лелеки",
+"Дорогі нам хвилини Господь дарував",
+"Друже чому ти у смутку й журбі",
+"Друже! Як хочеш свій гріх подолать",
+"Дух Святой, прикоснись ко мне",
+"Дух Святой, Ты тот, в ком я нуждаюсь",
+"За Мною йди",
+"Заспіваймо пісню разом всі",
+"Ідеш ти сьогодні широким шляхом",
+"Ісус, Ти - найкращий Друг.",
+"Ісуса, якого люблю",
+"Кажеш Ти мені",
+"Квітучий край",
+"Кожний спрагнений, іди та пий",
+"Коли Господь вертав",
+"Коли молюся я до Бога",
+"Краса вічна Ісуса світись в мені",
+"Куда б мы не ехали, куда б не бежали",
+"Любив Ісус людей понад усе",
+"Любовь Христа безмерно велика",
+"Манит сердце мечтою",
+"Ми йдемо по вузькій стежині",
+"Милість твоя",
+"Моя молитва нехай лине",
+"Моє щастя заховане в Бозі",
+"Мій Бог - моя надія",
+"Мій Господь, в молитві до Тебе схиляюсь",
+"На Голгофській горі",
+"На крилах орла",
+"На світанку, чи пізньої ночі",
+"Наш Бог так велик",
+"Наш Бог-Всемогутній Бог!",
+"Наші дні немов птах",
+"Не в словах щоденних молитов",
+"Небо, небо небес",
+"Небо, небо небес (УКР)",
+"Немає проблеми в житті",
+"Нехай поклоняться Тобі",
+"Нині радість стала",
+"Ніч покрила землю",
+"О молитва, о молитва!",
+"О, Дух Святий",
+"Одного ранку ще до світанку",
+"Ой над Вифлеємом",
+"Ой, у Вифлеємі весела новина",
+"Ось Він Гряде",
+"Ось на наших з тобою столах",
+"Перед нами пролягла",
+"Покажіть мені любов",
+"Порою тяжко йти",
+"Прихожу к Тебе я с хвалою",
+"Про благодатну долю України",
+"Під час тривоги",
+"Радій і співай",
+"Радість у Христі я знайшов",
+"Радію я і торжествую",
+"Світлом засяй",
+"Славу відвічну в небі Син Божий залишив",
+"Сонце співає в лазурнім світанку",
+"Співай Господу, вся земля",
+"Співай, моє серце",
+"Там, у просторах безкрайніх",
+"Твоя любов, немов ріка",
+"Твоє ім'я написане зірками",
+"Тебе Творця світів просторів",
+"Ти відкупив нас від гріха",
+"Ти для мене, добрий Боже",
+"Ти мене любиш, Боже єдиний",
+"Ти моя сила у житті",
+"Ти навчи мене, мій Господь",
+"Тому хто біля тебе дай любов",
+"Тільки Ти, Господь, є надія моя",
+"У молитві схиляюсь на колінах в тиші",
+"Хай бушує шторм",
+"Хай не сумує",
+"Хвала Тобі, о Боже мій",
+"Хочу я з тобою жить",
+"Християнин, неси вогонь",
+"Христос є скеля",
+"Хто в небесах у мене є?",
+"Хто впав той підіймається",
+"Чому дивишся друже на землю",
+"Чудова благодать",
+"Чудову пісню Спас мені дав",
+"Чують вістку люди всього світу",
+"Щедрик-щедрик-щедрівочка",
+"Я без Бога прожив",
+"Я без Тебе нічого не значу",
+"Я вірю в безсмертя душі",
+"Я дякую за плин мого життя",
+"Я дякую Тобі мій Бог",
+"Я иду по земной тропе. Время вышло",
+"Я йду пустелею безплідною",
+"Я люблю співати Богу, славити Його ім'я",
+"Я поклоняюсь Тобі",
+"Я прийду вже скоро за тобою",
+"Я прийду, мій Господь",
+"Я славлю все Ісуса",
+"Я спасіння знайшов",
+"Я співаю, як Спаситель",
+"Як олень прагне до потоків",
+"Як я бажаю до Тебе Боже",
+"Яке є щастя",
+"Який сьогодні день чудовий",
+"Я злі підходять дні",
+"Якщо сил немає"
+];
+
+const cloudUniqueSongs = [...new Map(
+  cloudSongsRaw.map(song => [song.trim().toLocaleLowerCase("uk-UA"), song])
+).values()];
+
+function openSongCloud() {
+  const songsJson = JSON.stringify(cloudUniqueSongs);
+
+  const cloudHtml = '<!DOCTYPE html>\n' +
+'<html lang="uk">\n' +
+'<head>\n' +
+'<meta charset="UTF-8">\n' +
+'<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">\n' +
+'<title>Хмара Пісень</title>\n' +
+'<style>\n' +
+'*{box-sizing:border-box}\n' +
+'html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden}\n' +
+'body{background:#fff;color:#222;transition:background-color .25s ease,color .25s ease}\n' +
+'body.dark{background:#000;color:#fff}\n' +
+'#cloudCloseBtn{position:absolute;top:clamp(15px,1.5vw,35px);right:clamp(15px,1.5vw,35px);width:clamp(40px,3vw,60px);height:clamp(40px,3vw,60px);margin:0;padding:0;border:none;border-radius:50%;background:rgba(0,0,0,.07);color:#222;font-size:clamp(24px,1.8vw,36px);line-height:1;cursor:pointer;z-index:10000}\n' +
+'#cloudCloseBtn:hover{background:rgba(0,0,0,.14);transform:scale(1.05)}\n' +
+'#cloudFontControls{position:absolute;top:clamp(15px,1.5vw,35px);left:clamp(15px,1.5vw,35px);display:flex;gap:8px;z-index:10000}\n' +
+'#cloudFontControls button{width:clamp(40px,3vw,60px);height:clamp(40px,3vw,60px);margin:0;padding:0;border:none;border-radius:50%;background:rgba(0,0,0,.07);color:#222;font-size:clamp(24px,1.8vw,36px);line-height:1;cursor:pointer;transition:background .2s ease,transform .2s ease}\n' +
+'#cloudFontControls button:hover{background:rgba(0,0,0,.14);transform:scale(1.05)}\n' +
+'#cloudThemeToggle{position:absolute;top:clamp(15px,1.5vw,35px);left:calc(clamp(15px,1.5vw,35px) + clamp(40px,3vw,60px) * 2 + 16px);width:clamp(40px,3vw,60px);height:clamp(40px,3vw,60px);margin:0;padding:0;border:none;border-radius:50%;background:rgba(0,0,0,.07);color:#222;font-size:clamp(18px,1.5vw,30px);font-weight:700;line-height:1;cursor:pointer;z-index:10000;transition:background .2s ease,color .2s ease,transform .2s ease}\n' +
+'#cloudThemeToggle:hover{background:rgba(0,0,0,.14);transform:scale(1.05)}\n' +
+'body.dark #cloudFontControls button,body.dark #cloudThemeToggle,body.dark #cloudCloseBtn{background:rgba(255,255,255,.12);color:#fff}\n' +
+'body.dark #cloudFontControls button:hover,body.dark #cloudThemeToggle:hover,body.dark #cloudCloseBtn:hover{background:rgba(255,255,255,.22)}\n' +
+'#cloudSongsCloud{position:absolute;inset:0;width:100%;height:100%}\n' +
+'#cloudSongList{display:none;position:absolute;inset:0;width:100%;height:100%;overflow-y:auto;box-sizing:border-box;padding:70px 20px}\n' +
+'#cloudSongList.visible{display:block}\n' +
+'#cloudSongListOl{list-style:none;counter-reset:songnum;margin:0 auto;padding:0;max-width:900px}\n' +
+'#cloudSongListOl li{counter-increment:songnum;font-family:"Akrobat Black","Segoe UI",Arial,sans-serif;font-size:clamp(18px,2.2vw,32px);line-height:1.8;padding:10px 0;border-bottom:1px solid rgba(0,0,0,.08)}\n' +
+'#cloudSongListOl li::before{content:counter(songnum) ". ";opacity:.5;font-weight:400}\n' +
+'body.dark #cloudSongListOl li{border-bottom:1px solid rgba(255,255,255,.14)}\n' +
+'.cloud-song{position:absolute;font-size:var(--song-font-size,clamp(18px,1.35vw,42px));max-width:min(82vw,1800px);line-height:1.25;font-weight:500;color:inherit;font-family:"Akrobat Black","Segoe UI",Arial,sans-serif;overflow-wrap:break-word;opacity:0;filter:blur(5px);transform:translate(var(--enter-x,0),var(--enter-y,15px)) scale(.94);animation:cloudSongAppear .85s cubic-bezier(.22,1,.36,1) forwards;pointer-events:none;transition:color .25s ease;will-change:transform,opacity,filter}\n' +
+'@keyframes cloudSongAppear{0%{opacity:0;filter:blur(5px);transform:translate(var(--enter-x,0),var(--enter-y,15px)) scale(.94)}65%{opacity:1;filter:blur(0)}100%{opacity:1;filter:blur(0);transform:translate(0,0) scale(1)}}\n' +
+'.cloud-song.hide{animation:cloudSongDisappear .65s cubic-bezier(.4,0,.2,1) forwards !important}\n' +
+'@keyframes cloudSongDisappear{0%{opacity:1;filter:blur(0);transform:scale(1)}100%{opacity:0;filter:blur(4px);transform:scale(.97)}}\n' +
+'@media (min-width:3000px){.cloud-song{max-width:82vw}}\n' +
+'@media (max-width:600px){.cloud-song{font-size:17px;max-width:200px}}\n' +
+'</style>\n' +
+'</head>\n' +
+'<body>\n' +
+'<div id="cloudFontControls" aria-label="Розмір шрифту">\n' +
+'<button id="cloudFontDecrease" aria-label="Зменшити шрифт">−</button>\n' +
+'<button id="cloudFontIncrease" aria-label="Збільшити шрифт">+</button>\n' +
+'</div>\n' +
+'<button id="cloudThemeToggle" aria-label="Інвертувати кольори">T</button>\n' +
+'<button id="cloudCloseBtn" aria-label="Закрити">×</button>\n' +
+'<div id="cloudSongsCloud"></div>\n' +
+'<div id="cloudSongList"><ol id="cloudSongListOl"></ol></div>\n' +
+'<script>\n' +
+'const cloudUniqueSongs = ' + songsJson + ';\n' +
+'const cloudWindowEl = document.body;\n' +
+'const cloudSongsCloudEl = document.getElementById("cloudSongsCloud");\n' +
+'const cloudFontDecrease = document.getElementById("cloudFontDecrease");\n' +
+'const cloudFontIncrease = document.getElementById("cloudFontIncrease");\n' +
+'const cloudThemeToggleBtn = document.getElementById("cloudThemeToggle");\n' +
+'const cloudCloseBtn = document.getElementById("cloudCloseBtn");\n' +
+'const cloudSongListEl = document.getElementById("cloudSongList");\n' +
+'const cloudSongListOl = document.getElementById("cloudSongListOl");\n' +
+'let cloudListMode = false;\n' +
+'const cloudFontList = ["Akrobat Black","Segoe UI","Arial","Roboto","Tahoma","Times New Roman","Comic Sans MS"];\n' +
+'let cloudFontIndex = 0;\n' +
+'let cloudFontFamily = cloudFontList[0];\n' +
+'function cloudIsFontAvailable(font){\n' +
+'  if (font.toLowerCase() === "sans-serif") return true;\n' +
+'  const testString = "mmmmmmmmmmlli";\n' +
+'  const testSize = "72px";\n' +
+'  const baseFonts = ["monospace","sans-serif","serif"];\n' +
+'  const span = document.createElement("span");\n' +
+'  span.style.position = "absolute";\n' +
+'  span.style.left = "-9999px";\n' +
+'  span.style.fontSize = testSize;\n' +
+'  span.textContent = testString;\n' +
+'  document.body.appendChild(span);\n' +
+'  const defaultWidths = {};\n' +
+'  baseFonts.forEach(function(bf){\n' +
+'    span.style.fontFamily = bf;\n' +
+'    defaultWidths[bf] = span.offsetWidth;\n' +
+'  });\n' +
+'  let detected = false;\n' +
+'  for (let i = 0; i < baseFonts.length; i++) {\n' +
+'    const bf = baseFonts[i];\n' +
+'    span.style.fontFamily = "\'" + font + "\', " + bf;\n' +
+'    if (span.offsetWidth !== defaultWidths[bf]) { detected = true; break; }\n' +
+'  }\n' +
+'  document.body.removeChild(span);\n' +
+'  return detected;\n' +
+'}\n' +
+'function cloudApplyFontFamily(font){\n' +
+'  cloudFontFamily = font;\n' +
+'  const familyStr = "\'" + font + "\', sans-serif";\n' +
+'  for (const item of cloudActiveSongs) {\n' +
+'    item.element.style.fontFamily = familyStr;\n' +
+'  }\n' +
+'  const liEls = cloudSongListOl.querySelectorAll("li");\n' +
+'  liEls.forEach(function(li){ li.style.fontFamily = familyStr; });\n' +
+'}\n' +
+'function cloudCycleFont(){\n' +
+'  let attempts = 0;\n' +
+'  let candidate;\n' +
+'  do {\n' +
+'    cloudFontIndex = (cloudFontIndex + 1) % cloudFontList.length;\n' +
+'    candidate = cloudFontList[cloudFontIndex];\n' +
+'    attempts++;\n' +
+'  } while (!cloudIsFontAvailable(candidate) && attempts < cloudFontList.length);\n' +
+'  cloudApplyFontFamily(candidate);\n' +
+'}\n' +
+'function cloudEscapeHtml(str){\n' +
+'  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");\n' +
+'}\n' +
+'function cloudBuildSongList(){\n' +
+'  const sorted = cloudUniqueSongs.slice().sort(function(a, b){\n' +
+'    return a.localeCompare(b, "uk");\n' +
+'  });\n' +
+'  cloudSongListOl.innerHTML = sorted.map(function(song){\n' +
+'    return "<li>" + cloudEscapeHtml(song) + "</li>";\n' +
+'  }).join("");\n' +
+'  const familyStr = "\'" + cloudFontFamily + "\', sans-serif";\n' +
+'  cloudSongListOl.querySelectorAll("li").forEach(function(li){ li.style.fontFamily = familyStr; });\n' +
+'}\n' +
+'function cloudToggleList(){\n' +
+'  cloudListMode = !cloudListMode;\n' +
+'  if (cloudListMode) {\n' +
+'    if (cloudTimer !== null) { clearInterval(cloudTimer); cloudTimer = null; }\n' +
+'    cloudSongsCloudEl.innerHTML = "";\n' +
+'    cloudActiveSongs = [];\n' +
+'    cloudSongsCloudEl.style.display = "none";\n' +
+'    cloudSongListEl.classList.add("visible");\n' +
+'  } else {\n' +
+'    cloudSongListEl.classList.remove("visible");\n' +
+'    cloudSongsCloudEl.style.display = "";\n' +
+'    cloudCreateNewSongCycle();\n' +
+'    cloudCreateSong();\n' +
+'    cloudTimer = setInterval(cloudCreateSong, 2000);\n' +
+'  }\n' +
+'}\n' +
+'let cloudFontScale = 1;\n' +
+'const CLOUD_FONT_STEP = 0.10;\n' +
+'const CLOUD_MIN_FONT_SCALE = 0.40;\n' +
+'const CLOUD_MAX_FONT_SCALE = 12;\n' +
+'let cloudTimer = null;\n' +
+'let cloudActiveSongs = [];\n' +
+'let cloudShuffledSongs = [];\n' +
+'let cloudCurrentSongIndex = 0;\n' +
+'let cloudLastSongOfPreviousCycle = null;\n' +
+'function cloudGetBaseFontSize(){\n' +
+'  const area = window.innerWidth * window.innerHeight;\n' +
+'  if (area >= 7000000) return 38;\n' +
+'  if (area >= 3000000) return 32;\n' +
+'  if (area >= 1800000) return 26;\n' +
+'  if (area >= 900000) return 21;\n' +
+'  return 18;\n' +
+'}\n' +
+'function cloudGetCurrentFontSize(){\n' +
+'  return Math.max(10, cloudGetBaseFontSize() * cloudFontScale);\n' +
+'}\n' +
+'function cloudApplyFontSizeToSongs(){\n' +
+'  const size = cloudGetCurrentFontSize();\n' +
+'  for (const item of cloudActiveSongs) {\n' +
+'    item.element.style.setProperty("--song-font-size", size + "px");\n' +
+'  }\n' +
+'}\n' +
+'function cloudRebuildSongPositions(){\n' +
+'  cloudApplyFontSizeToSongs();\n' +
+'  while (cloudActiveSongs.length > 0) {\n' +
+'    const placed = [];\n' +
+'    let failed = false;\n' +
+'    for (const item of cloudActiveSongs) {\n' +
+'      const width = item.element.offsetWidth;\n' +
+'      const height = item.element.offsetHeight;\n' +
+'      const position = cloudFindFreePositionForList(width, height, placed);\n' +
+'      if (!position) { failed = true; break; }\n' +
+'      item.element.style.left = position.x + "px";\n' +
+'      item.element.style.top = position.y + "px";\n' +
+'      item.x = position.x;\n' +
+'      item.y = position.y;\n' +
+'      item.width = width;\n' +
+'      item.height = height;\n' +
+'      placed.push({ x: position.x, y: position.y, width, height });\n' +
+'    }\n' +
+'    if (!failed) return;\n' +
+'    cloudRemoveOldestSong(true);\n' +
+'  }\n' +
+'}\n' +
+'function cloudFindFreePositionForList(width, height, placed){\n' +
+'  const screenWidth = window.innerWidth;\n' +
+'  const screenHeight = window.innerHeight;\n' +
+'  const padding = Math.max(35, Math.min(screenWidth, screenHeight) * 0.025);\n' +
+'  const gap = Math.max(25, Math.min(screenWidth, screenHeight) * 0.018);\n' +
+'  for (let i = 0; i < 500; i++) {\n' +
+'    const x = padding + Math.random() * Math.max(1, screenWidth - width - padding * 2);\n' +
+'    const y = padding + Math.random() * Math.max(1, screenHeight - height - padding * 2);\n' +
+'    const candidate = { x, y, width, height };\n' +
+'    let free = true;\n' +
+'    for (const item of placed) {\n' +
+'      const overlap = candidate.x < item.x + item.width + gap && candidate.x + candidate.width + gap > item.x && candidate.y < item.y + item.height + gap && candidate.y + candidate.height + gap > item.y;\n' +
+'      if (overlap) { free = false; break; }\n' +
+'    }\n' +
+'    if (free) return candidate;\n' +
+'  }\n' +
+'  return null;\n' +
+'}\n' +
+'function cloudChangeFontSize(delta){\n' +
+'  const next = Math.min(CLOUD_MAX_FONT_SCALE, Math.max(CLOUD_MIN_FONT_SCALE, cloudFontScale + delta));\n' +
+'  if (next === cloudFontScale) return;\n' +
+'  cloudFontScale = next;\n' +
+'  cloudRebuildSongPositions();\n' +
+'}\n' +
+'function cloudGetTargetSongCount(){\n' +
+'  const area = window.innerWidth * window.innerHeight;\n' +
+'  if (area >= 7000000) return 32;\n' +
+'  if (area >= 3000000) return 27;\n' +
+'  if (area >= 1800000) return 22;\n' +
+'  if (area >= 900000) return 16;\n' +
+'  return 10;\n' +
+'}\n' +
+'function cloudShuffleSongs(array){\n' +
+'  const result = array.slice();\n' +
+'  for (let i = result.length - 1; i > 0; i--) {\n' +
+'    const randomIndex = Math.floor(Math.random() * (i + 1));\n' +
+'    [result[i], result[randomIndex]] = [result[randomIndex], result[i]];\n' +
+'  }\n' +
+'  return result;\n' +
+'}\n' +
+'function cloudCreateNewSongCycle(){\n' +
+'  cloudShuffledSongs = cloudShuffleSongs(cloudUniqueSongs);\n' +
+'  if (cloudShuffledSongs.length > 1 && cloudLastSongOfPreviousCycle !== null && cloudShuffledSongs[0] === cloudLastSongOfPreviousCycle) {\n' +
+'    const randomIndex = 1 + Math.floor(Math.random() * (cloudShuffledSongs.length - 1));\n' +
+'    [cloudShuffledSongs[0], cloudShuffledSongs[randomIndex]] = [cloudShuffledSongs[randomIndex], cloudShuffledSongs[0]];\n' +
+'  }\n' +
+'  cloudCurrentSongIndex = 0;\n' +
+'}\n' +
+'function cloudGetNextSong(){\n' +
+'  if (cloudShuffledSongs.length === 0 || cloudCurrentSongIndex >= cloudShuffledSongs.length) {\n' +
+'    if (cloudShuffledSongs.length > 0) {\n' +
+'      cloudLastSongOfPreviousCycle = cloudShuffledSongs[cloudShuffledSongs.length - 1];\n' +
+'    }\n' +
+'    cloudCreateNewSongCycle();\n' +
+'  }\n' +
+'  return cloudShuffledSongs[cloudCurrentSongIndex++];\n' +
+'}\n' +
+'function cloudToggleTheme(){\n' +
+'  cloudWindowEl.classList.toggle("dark");\n' +
+'}\n' +
+'function cloudCreateSong(){\n' +
+'  const targetCount = cloudGetTargetSongCount();\n' +
+'  if (cloudActiveSongs.length >= targetCount) {\n' +
+'    cloudRemoveOldestSong(false);\n' +
+'  }\n' +
+'  const song = cloudGetNextSong();\n' +
+'  if (!song) return;\n' +
+'  const element = document.createElement("div");\n' +
+'  const directions = [["0px","-18px"],["0px","18px"],["-18px","0px"],["18px","0px"],["-12px","-12px"],["12px","-12px"],["-12px","12px"],["12px","12px"]];\n' +
+'  const direction = directions[Math.floor(Math.random() * directions.length)];\n' +
+'  element.style.setProperty("--enter-x", direction[0]);\n' +
+'  element.style.setProperty("--enter-y", direction[1]);\n' +
+'  element.className = "cloud-song";\n' +
+'  element.textContent = song;\n' +
+'  element.style.fontFamily = "\'" + cloudFontFamily + "\', sans-serif";\n' +
+'  element.style.setProperty("--song-font-size", cloudGetCurrentFontSize() + "px");\n' +
+'  element.style.visibility = "hidden";\n' +
+'  cloudSongsCloudEl.appendChild(element);\n' +
+'  const width = element.offsetWidth;\n' +
+'  const height = element.offsetHeight;\n' +
+'  let position = cloudFindFreePosition(width, height);\n' +
+'  while (!position && cloudActiveSongs.length > 0) {\n' +
+'    cloudRemoveOldestSong(false);\n' +
+'    position = cloudFindFreePosition(width, height);\n' +
+'  }\n' +
+'  if (!position) { element.remove(); return; }\n' +
+'  element.style.left = position.x + "px";\n' +
+'  element.style.top = position.y + "px";\n' +
+'  element.style.visibility = "visible";\n' +
+'  cloudActiveSongs.push({ element, x: position.x, y: position.y, width, height });\n' +
+'}\n' +
+'function cloudFindFreePosition(width, height){\n' +
+'  const screenWidth = window.innerWidth;\n' +
+'  const screenHeight = window.innerHeight;\n' +
+'  const padding = Math.max(35, Math.min(screenWidth, screenHeight) * 0.025);\n' +
+'  const gap = Math.max(25, Math.min(screenWidth, screenHeight) * 0.018);\n' +
+'  const attempts = 400;\n' +
+'  for (let i = 0; i < attempts; i++) {\n' +
+'    const x = padding + Math.random() * Math.max(1, screenWidth - width - padding * 2);\n' +
+'    const y = padding + Math.random() * Math.max(1, screenHeight - height - padding * 2);\n' +
+'    const candidate = { x, y, width, height };\n' +
+'    if (cloudIsPositionFree(candidate, gap)) return candidate;\n' +
+'  }\n' +
+'  return null;\n' +
+'}\n' +
+'function cloudIsPositionFree(candidate, gap){\n' +
+'  for (const item of cloudActiveSongs) {\n' +
+'    const overlap = candidate.x < item.x + item.width + gap && candidate.x + candidate.width + gap > item.x && candidate.y < item.y + item.height + gap && candidate.y + candidate.height + gap > item.y;\n' +
+'    if (overlap) return false;\n' +
+'  }\n' +
+'  return true;\n' +
+'}\n' +
+'function cloudRemoveOldestSong(immediate){\n' +
+'  if (cloudActiveSongs.length === 0) return;\n' +
+'  const oldSong = cloudActiveSongs.shift();\n' +
+'  if (!oldSong.element) return;\n' +
+'  if (immediate) { oldSong.element.remove(); return; }\n' +
+'  oldSong.element.classList.add("hide");\n' +
+'  setTimeout(function(){\n' +
+'    if (oldSong.element && oldSong.element.parentNode) {\n' +
+'      oldSong.element.remove();\n' +
+'    }\n' +
+'  }, 700);\n' +
+'}\n' +
+'cloudCloseBtn.addEventListener("click", function(){ window.close(); });\n' +
+'document.addEventListener("keydown", function(event){\n' +
+'  if (event.key === "Escape") { window.close(); }\n' +
+'  if (event.key === "+" || event.key === "=" || event.code === "NumpadAdd") {\n' +
+'    event.preventDefault();\n' +
+'    cloudChangeFontSize(CLOUD_FONT_STEP);\n' +
+'  }\n' +
+'  if (event.key === "-" || event.key === "_" || event.code === "NumpadSubtract") {\n' +
+'    event.preventDefault();\n' +
+'    cloudChangeFontSize(-CLOUD_FONT_STEP);\n' +
+'  }\n' +
+'  if (event.key === "t" || event.key === "T" || event.code === "KeyT") {\n' +
+'    event.preventDefault();\n' +
+'    cloudToggleTheme();\n' +
+'  }\n' +
+'  if (event.code === "KeyL") {\n' +
+'    event.preventDefault();\n' +
+'    cloudToggleList();\n' +
+'  }\n' +
+'  if (event.code === "KeyF") {\n' +
+'    event.preventDefault();\n' +
+'    cloudCycleFont();\n' +
+'  }\n' +
+'});\n' +
+'cloudFontIncrease.addEventListener("click", function(){ cloudChangeFontSize(CLOUD_FONT_STEP); });\n' +
+'cloudFontDecrease.addEventListener("click", function(){ cloudChangeFontSize(-CLOUD_FONT_STEP); });\n' +
+'cloudThemeToggleBtn.addEventListener("click", function(){ cloudToggleTheme(); });\n' +
+'window.addEventListener("resize", function(){\n' +
+'  const target = cloudGetTargetSongCount();\n' +
+'  while (cloudActiveSongs.length > target) {\n' +
+'    cloudRemoveOldestSong();\n' +
+'  }\n' +
+'  cloudRebuildSongPositions();\n' +
+'});\n' +
+'cloudBuildSongList();\n' +
+'cloudCreateNewSongCycle();\n' +
+'cloudCreateSong();\n' +
+'cloudTimer = setInterval(cloudCreateSong, 2000);\n' +
+'<\/script>\n' +
+'</body>\n' +
+'</html>';
+
+  const cloudWin = window.open('', '_blank');
+  if (!cloudWin) {
+    alert('Браузер заблокував відкриття нової вкладки. Дозволь спливаючі вікна для цієї сторінки.');
+    return;
+  }
+  cloudWin.document.open();
+  cloudWin.document.write(cloudHtml);
+  cloudWin.document.close();
+}
+
+document.getElementById('cloudOpenBtn').addEventListener('click', openSongCloud);
 </script>
 
 </body>
