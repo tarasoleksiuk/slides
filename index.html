@@ -8,7 +8,7 @@
   * { box-sizing: border-box; }
   body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: #1e1e2e;
+    background: #141414;
     color: #eee;
     display: flex;
     flex-direction: column;
@@ -27,7 +27,7 @@
     width: 100%;
     max-width: 700px;
     height: 350px;
-    background: #2a2a3d;
+    background: #242424;
     color: #eee;
     border: 1px solid #444;
     border-radius: 8px;
@@ -40,6 +40,13 @@
     background: #f5f5f5;
     color: #111;
     border: 1px solid #ccc;
+  }
+  body.light-theme button {
+    background: #111111;
+    color: #ffffff;
+  }
+  body.light-theme button:hover {
+    background: #333333;
   }
   textarea::placeholder { color: #888; }
   .top-bar {
@@ -72,12 +79,12 @@
     font-size: 16px;
     border: none;
     border-radius: 8px;
-    background: #6c5ce7;
-    color: white;
+    background: #ffffff;
+    color: #111111;
     cursor: pointer;
     transition: background 0.2s;
   }
-  button:hover { background: #5a4bd6; }
+  button:hover { background: #cccccc; }
   .hint {
     max-width: 700px;
     margin-top: 12px;
@@ -243,14 +250,14 @@ function generate() {
     height: 40px;
     border-radius: 8px;
     border: 1px solid #444;
-    background: #2a2a3d;
+    background: #242424;
     color: #eee;
     font-size: 20px;
     cursor: pointer;
     line-height: 1;
   }
   .font-controls button:hover {
-    background: #3a3a52;
+    background: #3a3a3a;
   }
   body.light-theme .font-controls button {
     border: 1px solid #ccc;
@@ -665,15 +672,13 @@ function openSongCloud() {
 'html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden}\n' +
 'body{background:#fff;color:#222;transition:background-color .25s ease,color .25s ease}\n' +
 'body.dark{background:#000;color:#fff}\n' +
-'#cloudCloseBtn{position:absolute;top:clamp(15px,1.5vw,35px);right:clamp(15px,1.5vw,35px);width:clamp(40px,3vw,60px);height:clamp(40px,3vw,60px);margin:0;padding:0;border:none;border-radius:50%;background:rgba(0,0,0,.07);color:#222;font-size:clamp(24px,1.8vw,36px);line-height:1;cursor:pointer;z-index:10000}\n' +
-'#cloudCloseBtn:hover{background:rgba(0,0,0,.14);transform:scale(1.05)}\n' +
-'#cloudFontControls{position:absolute;top:clamp(15px,1.5vw,35px);left:clamp(15px,1.5vw,35px);display:flex;gap:8px;z-index:10000}\n' +
-'#cloudFontControls button{width:clamp(40px,3vw,60px);height:clamp(40px,3vw,60px);margin:0;padding:0;border:none;border-radius:50%;background:rgba(0,0,0,.07);color:#222;font-size:clamp(24px,1.8vw,36px);line-height:1;cursor:pointer;transition:background .2s ease,transform .2s ease}\n' +
-'#cloudFontControls button:hover{background:rgba(0,0,0,.14);transform:scale(1.05)}\n' +
-'#cloudThemeToggle{position:absolute;top:clamp(15px,1.5vw,35px);left:calc(clamp(15px,1.5vw,35px) + clamp(40px,3vw,60px) * 2 + 16px);width:clamp(40px,3vw,60px);height:clamp(40px,3vw,60px);margin:0;padding:0;border:none;border-radius:50%;background:rgba(0,0,0,.07);color:#222;font-size:clamp(18px,1.5vw,30px);font-weight:700;line-height:1;cursor:pointer;z-index:10000;transition:background .2s ease,color .2s ease,transform .2s ease}\n' +
-'#cloudThemeToggle:hover{background:rgba(0,0,0,.14);transform:scale(1.05)}\n' +
-'body.dark #cloudFontControls button,body.dark #cloudThemeToggle,body.dark #cloudCloseBtn{background:rgba(255,255,255,.12);color:#fff}\n' +
-'body.dark #cloudFontControls button:hover,body.dark #cloudThemeToggle:hover,body.dark #cloudCloseBtn:hover{background:rgba(255,255,255,.22)}\n' +
+'.cloud-ctrl-btn{width:clamp(44px,3vw,60px);height:clamp(44px,3vw,60px);margin:0;padding:0;border:none;border-radius:50%;background:rgba(0,0,0,.07);color:#222;font-size:clamp(20px,1.6vw,32px);line-height:1;cursor:pointer;transition:background .2s ease,transform .2s ease}\n' +
+'.cloud-ctrl-btn:hover{background:rgba(0,0,0,.14);transform:scale(1.05)}\n' +
+'body.dark .cloud-ctrl-btn{background:rgba(255,255,255,.12);color:#fff}\n' +
+'body.dark .cloud-ctrl-btn:hover{background:rgba(255,255,255,.22)}\n' +
+'#cloudCloseBtn{position:absolute;top:clamp(15px,1.5vw,35px);right:clamp(15px,1.5vw,35px);font-size:clamp(24px,1.8vw,36px);z-index:10000}\n' +
+'#cloudFontControls{position:absolute;top:clamp(15px,1.5vw,35px);left:clamp(15px,1.5vw,35px);display:flex;flex-wrap:wrap;gap:8px;max-width:min(70vw,320px);z-index:10000}\n' +
+'#cloudFontControls button{font-size:clamp(18px,1.4vw,28px);font-weight:600}\n' +
 '#cloudSongsCloud{position:absolute;inset:0;width:100%;height:100%}\n' +
 '#cloudSongList{display:none;position:absolute;inset:0;width:100%;height:100%;overflow-y:auto;box-sizing:border-box;padding:70px 20px}\n' +
 '#cloudSongList.visible{display:block}\n' +
@@ -686,16 +691,18 @@ function openSongCloud() {
 '.cloud-song.hide{animation:cloudSongDisappear .65s cubic-bezier(.4,0,.2,1) forwards !important}\n' +
 '@keyframes cloudSongDisappear{0%{opacity:1;filter:blur(0);transform:scale(1)}100%{opacity:0;filter:blur(4px);transform:scale(.97)}}\n' +
 '@media (min-width:3000px){.cloud-song{max-width:82vw}}\n' +
-'@media (max-width:600px){.cloud-song{font-size:17px;max-width:200px}}\n' +
+'@media (max-width:600px){.cloud-song{max-width:min(78vw,320px)}}\n' +
 '</style>\n' +
 '</head>\n' +
 '<body>\n' +
-'<div id="cloudFontControls" aria-label="Розмір шрифту">\n' +
-'<button id="cloudFontDecrease" aria-label="Зменшити шрифт">−</button>\n' +
-'<button id="cloudFontIncrease" aria-label="Збільшити шрифт">+</button>\n' +
+'<div id="cloudFontControls" aria-label="Керування">\n' +
+'<button id="cloudThemeToggle" class="cloud-ctrl-btn" aria-label="Інвертувати кольори" title="Тема (T)">T</button>\n' +
+'<button id="cloudFontDecrease" class="cloud-ctrl-btn" aria-label="Зменшити шрифт" title="Зменшити шрифт (Shift/-)">−</button>\n' +
+'<button id="cloudFontIncrease" class="cloud-ctrl-btn" aria-label="Збільшити шрифт" title="Збільшити шрифт (Shift/+)">+</button>\n' +
+'<button id="cloudFontCycleBtn" class="cloud-ctrl-btn" aria-label="Наступний шрифт" title="Наступний шрифт (F)">Aa</button>\n' +
+'<button id="cloudListToggleBtn" class="cloud-ctrl-btn" aria-label="Список пісень" title="Список пісень (L)">☰</button>\n' +
 '</div>\n' +
-'<button id="cloudThemeToggle" aria-label="Інвертувати кольори">T</button>\n' +
-'<button id="cloudCloseBtn" aria-label="Закрити">×</button>\n' +
+'<button id="cloudCloseBtn" class="cloud-ctrl-btn" aria-label="Закрити">×</button>\n' +
 '<div id="cloudSongsCloud"></div>\n' +
 '<div id="cloudSongList"><ol id="cloudSongListOl"></ol></div>\n' +
 '<script>\n' +
@@ -705,6 +712,8 @@ function openSongCloud() {
 'const cloudFontDecrease = document.getElementById("cloudFontDecrease");\n' +
 'const cloudFontIncrease = document.getElementById("cloudFontIncrease");\n' +
 'const cloudThemeToggleBtn = document.getElementById("cloudThemeToggle");\n' +
+'const cloudFontCycleBtn = document.getElementById("cloudFontCycleBtn");\n' +
+'const cloudListToggleBtn = document.getElementById("cloudListToggleBtn");\n' +
 'const cloudCloseBtn = document.getElementById("cloudCloseBtn");\n' +
 'const cloudSongListEl = document.getElementById("cloudSongList");\n' +
 'const cloudSongListOl = document.getElementById("cloudSongListOl");\n' +
@@ -984,6 +993,8 @@ function openSongCloud() {
 'cloudFontIncrease.addEventListener("click", function(){ cloudChangeFontSize(CLOUD_FONT_STEP); });\n' +
 'cloudFontDecrease.addEventListener("click", function(){ cloudChangeFontSize(-CLOUD_FONT_STEP); });\n' +
 'cloudThemeToggleBtn.addEventListener("click", function(){ cloudToggleTheme(); });\n' +
+'cloudFontCycleBtn.addEventListener("click", function(){ cloudCycleFont(); });\n' +
+'cloudListToggleBtn.addEventListener("click", function(){ cloudToggleList(); });\n' +
 'window.addEventListener("resize", function(){\n' +
 '  const target = cloudGetTargetSongCount();\n' +
 '  while (cloudActiveSongs.length > target) {\n' +
