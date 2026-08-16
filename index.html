@@ -85,6 +85,27 @@
     transition: background 0.2s;
   }
   button:hover { background: #cccccc; }
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  #clearBtn {
+    background: #333333;
+    color: #eee;
+    margin-top: 16px;
+  }
+  #clearBtn:hover {
+    background: #555555 !important;
+  }
+  body.light-theme #clearBtn {
+    background: #e0e0e0 !important;
+    color: #111;
+  }
+  body.light-theme #clearBtn:hover {
+    background: #c0c0c0 !important;
+  }
   .hint {
     max-width: 700px;
     margin-top: 12px;
@@ -113,7 +134,10 @@
 </div>
 <h1>Генератор слайдів для тексту пісні</h1>
 <textarea id="lyrics" placeholder="Встав сюди текст пісні. Куплети розділяй порожнім рядком — кожен куплет стане окремим слайдом на весь екран."></textarea>
-<button onclick="generate()">Генерувати</button>
+<div class="btn-row">
+  <button onclick="generate()">Генерувати</button>
+  <button id="clearBtn" onclick="document.getElementById('lyrics').value=''; document.getElementById('lyrics').focus();">Очистити</button>
+</div>
 <p class="hint">Порада: розділяй куплети порожнім рядком (Enter двічі). Текст між * або ** — жирний, між _ або __ — курсив. У режимі перегляду перемикай слайди стрілками або пробілом. A± — розмір шрифта, Shift +/− — лупа, T — тема.</p>
 <a href="https://t.me/VerkhnieVysotske/7" target="_blank" rel="noopener noreferrer" class="mountain-link" title="Верхнє Висоцьке">⛰️</a>
 
@@ -237,13 +261,21 @@ function generate() {
     .adjacent-preview {
       display: none;
     }
+    .counter {
+      right: 10px;
+      bottom: 10px;
+      font-size: 12px;
+    }
   }
   .font-controls {
     position: fixed;
-    top: 20px;
-    right: 30px;
+    top: 12px;
+    right: 10px;
     display: flex;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 5px;
+    max-width: calc(100vw - 20px);
+    justify-content: flex-end;
   }
   .font-controls button {
     width: 40px;
@@ -252,9 +284,10 @@ function generate() {
     border: 1px solid #444;
     background: #242424;
     color: #eee;
-    font-size: 20px;
+    font-size: 15px;
     cursor: pointer;
     line-height: 1;
+    flex-shrink: 0;
   }
   .font-controls button:hover {
     background: #3a3a3a;
@@ -273,6 +306,18 @@ function generate() {
   }
   #themeBtn:hover {
     background: rgba(128,128,128,0.15) !important;
+  }
+  @media (max-width: 500px) {
+    .font-controls {
+      top: 8px;
+      right: 6px;
+      gap: 4px;
+    }
+    .font-controls button {
+      width: 34px;
+      height: 34px;
+      font-size: 13px;
+    }
   }
 </style>
 </head>
