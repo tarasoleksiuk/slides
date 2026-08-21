@@ -139,7 +139,7 @@
   <button id="clearBtn" onclick="document.getElementById('lyrics').value=''; document.getElementById('lyrics').focus();">Очистити</button>
 </div>
 <p class="hint">Порада: розділяй куплети порожнім рядком (Enter двічі). Текст між * або ** — жирний, між _ або __ — курсив. У режимі перегляду перемикай слайди стрілками або пробілом. A± — розмір шрифта, Shift +/− — лупа, T — тема.</p>
-<a href="https://t.me/VerkhnieVysotske/7" target="_blank" rel="noopener noreferrer" class="mountain-link" title="Верхнє Висоцьке">⛰️</a>
+<a href="https://telegra.ph/PІSNІ-08-21-2" target="_blank" rel="noopener noreferrer" class="mountain-link" title="Верхнє Висоцьке">📖</a>
 
 <script>
 function generate() {
@@ -256,7 +256,7 @@ function generate() {
   body.light-theme .adjacent-preview {
     color: #aaa;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 768px), (pointer: coarse) {
     .nav-hint,
     .adjacent-preview {
       display: none;
@@ -579,7 +579,7 @@ const cloudSongsRaw = [
   {n:"Величає Тебе душа моя", u:"https://t.me/VerkhnieVysotske/87"},
   {n:"Величний наш Бог", u:"https://t.me/VerkhnieVysotske/66"},
   {n:"Встає в синім небі зоря", u:"https://t.me/VerkhnieVysotske/65"},
-  {n:"Вся земля так довго на цей день чекала", u:"https://t.me/VerkhnieVysotske/9"},
+  {n:"Вся земля так довго на цей день чекала", u:"https://t.me/VerkhnieVysotske/161"},
   {n:"Відкрий серця двері", u:"https://t.me/VerkhnieVysotske/41"},
   {n:"Він воскрес, щоб весь світ оживити", u:"https://t.me/VerkhnieVysotske/105"},
   {n:"Він так любить всіх нас", u:"https://t.me/VerkhnieVysotske/122"},
@@ -751,6 +751,7 @@ function openSongCloud() {
 '<button id="cloudFontIncrease" class="cloud-ctrl-btn" aria-label="Збільшити шрифт" title="Збільшити шрифт (Shift/+)">+</button>\n' +
 '<button id="cloudFontCycleBtn" class="cloud-ctrl-btn" aria-label="Наступний шрифт" title="Наступний шрифт (F)">Aa</button>\n' +
 '<button id="cloudListToggleBtn" class="cloud-ctrl-btn" aria-label="Список пісень" title="Список пісень (L)">☰</button>\n' +
+'<button id="cloudFullscreenBtn" class="cloud-ctrl-btn" aria-label="Повний екран" title="Повний екран (W)">⛶</button>\n' +
 '</div>\n' +
 '<button id="cloudCloseBtn" class="cloud-ctrl-btn" aria-label="Закрити">×</button>\n' +
 '<div id="cloudSongsCloud"></div>\n' +
@@ -764,6 +765,7 @@ function openSongCloud() {
 'const cloudThemeToggleBtn = document.getElementById("cloudThemeToggle");\n' +
 'const cloudFontCycleBtn = document.getElementById("cloudFontCycleBtn");\n' +
 'const cloudListToggleBtn = document.getElementById("cloudListToggleBtn");\n' +
+'const cloudFullscreenBtn = document.getElementById("cloudFullscreenBtn");\n' +
 'const cloudCloseBtn = document.getElementById("cloudCloseBtn");\n' +
 'const cloudSongListEl = document.getElementById("cloudSongList");\n' +
 'const cloudSongListOl = document.getElementById("cloudSongListOl");\n' +
@@ -952,6 +954,16 @@ function openSongCloud() {
 'function cloudToggleTheme(){\n' +
 '  cloudWindowEl.classList.toggle("dark");\n' +
 '}\n' +
+'function cloudToggleFullscreen(){\n' +
+'  if (!document.fullscreenElement) {\n' +
+'    document.documentElement.requestFullscreen().catch(function(){});\n' +
+'  } else {\n' +
+'    document.exitFullscreen().catch(function(){});\n' +
+'  }\n' +
+'}\n' +
+'document.addEventListener("fullscreenchange", function(){\n' +
+'  if (cloudFullscreenBtn) cloudFullscreenBtn.textContent = document.fullscreenElement ? "⤢" : "⛶";\n' +
+'});\n' +
 'function cloudCreateSong(){\n' +
 '  const targetCount = cloudGetTargetSongCount();\n' +
 '  if (cloudActiveSongs.length >= targetCount) {\n' +
@@ -1040,12 +1052,17 @@ function openSongCloud() {
 '    event.preventDefault();\n' +
 '    cloudCycleFont();\n' +
 '  }\n' +
+'  if (event.code === "KeyW") {\n' +
+'    event.preventDefault();\n' +
+'    cloudToggleFullscreen();\n' +
+'  }\n' +
 '});\n' +
 'cloudFontIncrease.addEventListener("click", function(){ cloudChangeFontSize(CLOUD_FONT_STEP); });\n' +
 'cloudFontDecrease.addEventListener("click", function(){ cloudChangeFontSize(-CLOUD_FONT_STEP); });\n' +
 'cloudThemeToggleBtn.addEventListener("click", function(){ cloudToggleTheme(); });\n' +
 'cloudFontCycleBtn.addEventListener("click", function(){ cloudCycleFont(); });\n' +
 'cloudListToggleBtn.addEventListener("click", function(){ cloudToggleList(); });\n' +
+'cloudFullscreenBtn.addEventListener("click", function(){ cloudToggleFullscreen(); });\n' +
 'window.addEventListener("resize", function(){\n' +
 '  const target = cloudGetTargetSongCount();\n' +
 '  while (cloudActiveSongs.length > target) {\n' +
